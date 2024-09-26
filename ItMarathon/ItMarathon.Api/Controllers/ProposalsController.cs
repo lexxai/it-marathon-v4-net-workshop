@@ -35,7 +35,7 @@ public class ProposalsController(IProposalService proposalService, IMapper mappe
         [FromQuery(Name = "$filter")] string? filter = "",
         [FromQuery(Name = "$orderby")] string? orderby = "Id asc")
     {
-        return Ok(await proposalService.GetAllProposalsAsync());
+        return Ok(await proposalService.GetAllProposalsAsync(Request));
     }
 
 

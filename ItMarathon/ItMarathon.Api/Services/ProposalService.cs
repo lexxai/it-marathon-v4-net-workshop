@@ -6,6 +6,10 @@ using ItMarathon.Dal.Common.Contracts;
 using ItMarathon.Dal.Entities;
 using ItMarathon.Dal.Enums;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.OData.Edm;
+using Microsoft.OData.UriParser;
+using Microsoft.AspNetCore.OData.Query;
+using ItMarathon.Api.Utilities;
 
 namespace ItMarathon.Api.Services;
 
@@ -17,9 +21,14 @@ namespace ItMarathon.Api.Services;
 /// <param name="blobService">The service managing Azure Blob storage operations.</param>
 public class ProposalService(IUnitOfWork unitOfWork, IMapper mapper, IAzureBlobService blobService) : IProposalService
 {
+    private static readonly IEdmModel _edmModel = ODataUtility.GetEdmModel();
+
     /// <inheritdoc/>
-    public async Task<IEnumerable<ProposalDto>> GetAllProposalsAsync()
+    public async Task<IEnumerable<ProposalDto>> GetAllProposalsAsync(HttpRequest request)
     {
+        var odataQueryContext = new ODataQueryContext(_edmModel, typeof(Proposal), new ODataPath());
+        var queryOptions = new ODataQueryOptions<Proposal>(odataQueryContext, request);
+
         var proposals = await unitOfWork.Proposals.GetProposalsAsync(false);
         return mapper.Map<IEnumerable<ProposalDto>>(proposals);
     }
