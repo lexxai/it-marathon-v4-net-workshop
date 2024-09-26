@@ -25,10 +25,16 @@ public class ProposalsController(IProposalService proposalService, IMapper mappe
     /// <response code="200">Returns all Proposals.</response>
     [AllowAnonymous]
     [HttpGet]
-    public async Task<ActionResult<DataPage<ProposalDto>>> GetAllProposals()
+    public async Task<ActionResult<DataPage<ProposalDto>>> GetAllProposals(
+        FromQuery(Name = "$top") int? top,
+        FromQuery(Name = "$skip") int? skip,
+        FromQuery(Name = "$filter") string? filter,
+        FromQuery(Name = "$orderby") string? orderby
+        ) 
     {
-        return Ok(await proposalService.GetAllProposalsAsync());
+            return Ok(await proposalService.GetAllProposalsAsync());
     }
+
 
     /// <summary>
     /// Get a specific proposal by ID.
@@ -117,7 +123,7 @@ public class ProposalsController(IProposalService proposalService, IMapper mappe
         var propertyDefinitionIds = new HashSet<long>(mapper.Map<UpdateProposalDto>(proposalDto).Properties?
             .Select(p => p.PropertyDefinitionId) ?? []);
         await proposalService.ValidateMandatoryPropertyDefinitions(propertyDefinitionIds, ModelState);
-         await proposalService.ValidatePropertiesAsync(mapper.Map<UpdateProposalDto>(proposalDto).Properties!, ModelState);
+        await proposalService.ValidatePropertiesAsync(mapper.Map<UpdateProposalDto>(proposalDto).Properties!, ModelState);
 
         if (!ModelState.IsValid)
         {
