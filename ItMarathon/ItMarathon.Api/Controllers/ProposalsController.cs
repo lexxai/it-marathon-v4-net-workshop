@@ -21,16 +21,19 @@ public class ProposalsController(IProposalService proposalService, IMapper mappe
     /// <summary>
     /// Retrieves all proposals.
     /// </summary>
+    /// <param name='top'>Number of records to return.</param>
+    /// <param name="skip">Number of records to skip before taking.</param>
+    /// <param name="filter">OData expression for filtering.</param>
+    /// <param name="orderby">OData expression for sorting.</param>
     /// <returns>All Proposals.</returns>
     /// <response code="200">Returns all Proposals.</response>
     [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<DataPage<ProposalDto>>> GetAllProposals(
-        [FromQuery] int top,
-        [FromQuery] int skip,
-        [FromQuery] string filter,
-        [FromQuery] string orderby
-    )
+        [FromQuery(Name = "$top")] int? top = 20,
+        [FromQuery(Name = "$skip")] int? skip = 0,
+        [FromQuery(Name = "$filter")] string? filter = "",
+        [FromQuery(Name = "$orderby")] string? orderby = "Id asc")
     {
         return Ok(await proposalService.GetAllProposalsAsync());
     }
