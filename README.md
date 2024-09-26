@@ -135,3 +135,14 @@ ItMarathon.Api\appsettings.Development.json\
     "ConnectionString": "Взяти з Azure Storage Account - Blob",
   }
 `
+
+# HOME WORK
+
+
+`<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />`
+
+
+```
+> cd ItMarathon\ItMarathon.Api
+> dotnet add package Microsoft.AspNetCore.Mvc
+```
