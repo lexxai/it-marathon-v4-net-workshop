@@ -29,7 +29,7 @@ public class ProposalService(IUnitOfWork unitOfWork, IMapper mapper, IAzureBlobS
         var odataQueryContext = new ODataQueryContext(_edmModel, typeof(Proposal), new ODataPath());
         var queryOptions = new ODataQueryOptions<Proposal>(odataQueryContext, request);
 
-        var proposals = await unitOfWork.Proposals.GetProposalsAsync(false);
+        var proposals = await unitOfWork.Proposals.GetProposalsAsync(false, queryOptions);
         return mapper.Map<IEnumerable<ProposalDto>>(proposals);
     }
 
