@@ -138,11 +138,33 @@ ItMarathon.Api\appsettings.Development.json\
 
 # HOME WORK
 
-
-`<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />`
-
-
+## Завдання
+Реалізувати REST endpoint отримання оголошень з фільтруванням, 
+сортуванням і посторінковим завантаженням.
+В ProposalsController реалізувати метод:
 ```
-> cd ItMarathon\ItMarathon.Api
-> dotnet add package Microsoft.AspNetCore.Mvc
+public async Task<ActionResult<DataPage<ProposalDto>>> GetAllProposals(
+  [FromQuery(Name = "$top")] int? top,
+  [FromQuery(Name = "$skip")] int? skip,
+  [FromQuery(Name = "$filter")] string? filter,
+  [FromQuery(Name = "$orderby")] string? orderby)
 ```
+Цей метод повинен зчитувати з бази даних оголошення, 
+використовуючи надані параметри:
+- top - повертає тільки задану кількість перших записів
+- skip - пропускає задану кількість записів
+- filter - фільтрує записи (формат фільтра OData)
+- orderby - сортує записи (формат сортування OData)
+Додатково до цього повинна вираховуватись загальна кількість
+записів, що проходить фільтр.
+Це потрібно для вирахування кількості сторінок посторінкового
+завантаження.
+Написання юніт тестів для цієї функціональності буде плюсом
+
+## Реалізація
+![VS Code SQL LOG](image-2.png)
+
+## Результат
+![swagger 1](image.png)
+![swagger 21](image-1.png)
+![alt text](image-3.png)
