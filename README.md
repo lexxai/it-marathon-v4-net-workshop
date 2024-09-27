@@ -139,8 +139,8 @@ ItMarathon.Api\appsettings.Development.json\
 # HOME WORK
 
 ## Завдання
-Реалізувати REST endpoint отримання оголошень з фільтруванням, 
-сортуванням і посторінковим завантаженням.
+Реалізувати REST endpoint отримання оголошень з фільтруванням, сортуванням і посторінковим завантаженням.
+
 В ProposalsController реалізувати метод:
 ```
 public async Task<ActionResult<DataPage<ProposalDto>>> GetAllProposals(
@@ -149,22 +149,43 @@ public async Task<ActionResult<DataPage<ProposalDto>>> GetAllProposals(
   [FromQuery(Name = "$filter")] string? filter,
   [FromQuery(Name = "$orderby")] string? orderby)
 ```
-Цей метод повинен зчитувати з бази даних оголошення, 
-використовуючи надані параметри:
+Цей метод повинен зчитувати з бази даних оголошення, використовуючи надані параметри:
 - top - повертає тільки задану кількість перших записів
 - skip - пропускає задану кількість записів
 - filter - фільтрує записи (формат фільтра OData)
 - orderby - сортує записи (формат сортування OData)
-Додатково до цього повинна вираховуватись загальна кількість
-записів, що проходить фільтр.
-Це потрібно для вирахування кількості сторінок посторінкового
-завантаження.
-Написання юніт тестів для цієї функціональності буде плюсом
+
+Додатково до цього повинна вираховуватись загальна кількість записів, що проходить фільтр.
+
+Це потрібно для вирахування кількості сторінок посторінкового завантаження.
+
+Написання юніт тестів для цієї функціональності буде плюсом.
 
 ## Реалізація
+
+Apps:
+
+- Docker
+- Visual Studio Code
+- DBeaver
+- Postman
+
+Visual Studio Code Extensions:
+- C# Dev Kit
+- .NET Install Tool (.NET SDK 8.0)
+
+
 ![VS Code SQL LOG](image-2.png)
 
 ## Результат
+Database structure:
+![DataBase](image-4.png)
+Swagger:
 ![swagger 1](image.png)
 ![swagger 21](image-1.png)
+Image result:
 ![alt text](image-3.png)
+Postman request `$filter=Age eq 1 AND AgeUnits eq 1`:
+![alt text](image-5.png)
+Postman request `$filter=Age eq 1 AND AgeUnits eq 0`:
+![alt text](image-6.png)
