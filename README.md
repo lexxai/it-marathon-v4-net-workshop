@@ -189,3 +189,18 @@ Postman request `$filter=Age eq 1 AND AgeUnits eq 1`:
 ![alt text](image-5.png)
 Postman request `$filter=Age eq 1 AND AgeUnits eq 0`:
 ![alt text](image-6.png)
+
+### TotalCount
+```
+    public async Task<ActionResult<DataPage<ProposalDto>>> GetAllProposals(
+        [FromQuery(Name = "$top")] int? top = 20,
+        [FromQuery(Name = "$skip")] int? skip = 0,
+        [FromQuery(Name = "$filter")] string? filter = "",
+        [FromQuery(Name = "$orderby")] string? orderby = "Id asc")
+    {
+        var (proposals, totalCount) = await proposalService.GetAllProposalsAsync(Request);
+        var dataPage = new DataPage<ProposalDto>(proposals, totalCount);
+        return Ok(dataPage);
+    }
+```
+![totalCount](image-7.png)
