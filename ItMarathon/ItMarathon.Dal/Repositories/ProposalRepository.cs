@@ -55,7 +55,7 @@ public class ProposalRepository(ApplicationDbContext repositoryContext) :
 
     public void DeleteProposal(Proposal proposal) => Delete(proposal);
 
-    Task<IEnumerable<Proposal>> IProposalRepository.GetProposalsAsync(bool trackChanges, ODataQueryOptions queryOptions)
+    Task<(IEnumerable<Proposal> Proposals, long TotalCount)> IProposalRepository.GetProposalsAsync(bool trackChanges, ODataQueryOptions queryOptions)
     {
         throw new NotImplementedException();
     }
