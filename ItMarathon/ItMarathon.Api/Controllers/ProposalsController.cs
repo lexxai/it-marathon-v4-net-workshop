@@ -33,9 +33,11 @@ public class ProposalsController(IProposalService proposalService, IMapper mappe
         [FromQuery(Name = "$top")] int? top = 20,
         [FromQuery(Name = "$skip")] int? skip = 0,
         [FromQuery(Name = "$filter")] string? filter = "",
-        [FromQuery(Name = "$orderby")] string? orderby = "AppUserId asc")
+        [FromQuery(Name = "$orderby")] string? orderby = "Id asc")
     {
-        return Ok(await proposalService.GetAllProposalsAsync(Request));
+        var (proposals, totalCount) = await proposalService.GetAllProposalsAsync(Request);
+        var dataPage = new DataPage<ProposalDto>(proposals, totalCount);
+        return Ok(dataPage);
     }
 
 
