@@ -1,4 +1,5 @@
 ﻿using ItMarathon.Dal.Entities;
+using Microsoft.AspNetCore.OData.Query;
 
 
 namespace ItMarathon.Dal.Common.Contracts;
