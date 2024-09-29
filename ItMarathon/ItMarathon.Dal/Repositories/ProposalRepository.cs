@@ -9,9 +9,17 @@ namespace ItMarathon.Dal.Repositories;
 public class ProposalRepository(ApplicationDbContext repositoryContext) :
     RepositoryBase<Proposal>(repositoryContext), IProposalRepository
 {
-    public async Task<IEnumerable<Proposal>> GetProposalsAsync(bool trackChanges, ODataQueryOptions queryOptions)
+    public async Task<(IEnumerable<Proposal> Proposals, long TotalCount)> GetProposalsAsync(
+        bool trackChanges, ODataQueryOptions queryOptions)
     {
         IQueryable<Proposal> query = FindAll(trackChanges);
+
+        if (queryOptions?.Filter != null)
+        {
+            query = (IQueryable<Proposal>)queryOptions.Filter.ApplyTo(query, new ODataQuerySettings());
+        }
+
+        long totalCount = await query.LongCountAsync();
 
         if (queryOptions != null)
         {
@@ -27,7 +35,9 @@ public class ProposalRepository(ApplicationDbContext repositoryContext) :
                 .ThenInclude(properties => properties.PredefinedValue)
                     .ThenInclude(prop => prop!.ParentPropertyValue);
 
-        return await query.ToListAsync();
+        var proposals = await query.ToListAsync();
+
+        return (proposals, totalCount);
     }
 
     public async Task<Proposal?> GetProposalAsync(long proposalId, bool trackChanges)
@@ -44,4 +54,9 @@ public class ProposalRepository(ApplicationDbContext repositoryContext) :
     public void CreateProposal(Proposal proposal) => Create(proposal);
 
     public void DeleteProposal(Proposal proposal) => Delete(proposal);
+
+    Task<IEnumerable<Proposal>> IProposalRepository.GetProposalsAsync(bool trackChanges, ODataQueryOptions queryOptions)
+    {
+        throw new NotImplementedException();
+    }
 }
