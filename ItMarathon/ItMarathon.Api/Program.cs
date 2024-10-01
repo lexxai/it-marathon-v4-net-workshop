@@ -20,6 +20,18 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
+    // Add CORS services
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("AllowSpecificOrigin", policy =>
+        {
+            policy.WithOrigins("http://localhost:3000") // Allow your Angular app origin
+                .AllowAnyHeader()                    // Allow any header
+                .AllowAnyMethod();                   // Allow any HTTP method (GET, POST, etc.)
+        });
+    });
+
+
     // Add services to the container.
     builder.Services
         .AddControllers()
@@ -41,7 +53,7 @@ try
     builder.Services.AddAuthentication()
         .AddBearerToken();
     builder.Services.AddAuthorizationBuilder()
-        .AddPolicy(Consts.Authorization.SuperUserPolicy, policy => 
+        .AddPolicy(Consts.Authorization.SuperUserPolicy, policy =>
         {
             policy.RequireClaim(Consts.Authorization.IsSuperUserClaim, "True");
         });
@@ -87,7 +99,7 @@ try
         });
     });
 
-    builder.Host.UseSerilog((hostingContext, loggerConfiguration) => 
+    builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
         loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration));
 
     var app = builder.Build();
@@ -106,6 +118,9 @@ try
     app.UseAuthorization();
     app.MapControllers();
 
+    // Enable CORS middleware
+    app.UseCors("AllowSpecificOrigin");
+
     using (var scope = app.Services.CreateScope())
     {
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -114,7 +129,7 @@ try
 
     app.Run();
 }
-catch(Exception ex)
+catch (Exception ex)
 {
     Log.Fatal(ex, "Application terminated unexpectedly");
 }
