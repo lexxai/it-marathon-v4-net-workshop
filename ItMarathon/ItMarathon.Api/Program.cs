@@ -25,7 +25,7 @@ try
     {
         options.AddPolicy("AllowSpecificOrigin", policy =>
         {
-            policy.WithOrigins("http://localhost:3333") // Allow your Angular app origin
+            policy.WithOrigins("https://stitmarathonlexxaiprod.z16.web.core.windows.net") // Allow your Angular app origin
                 .AllowAnyHeader()                    // Allow any header
                 .AllowAnyMethod();                   // Allow any HTTP method (GET, POST, etc.)
         });
